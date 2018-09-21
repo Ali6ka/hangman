@@ -12,7 +12,7 @@ public interface PersonService
 
     List<Person> findAll();
 
-    Person save(Person person);
+    void save(Person person);
 
     void delete(Person person);
 
