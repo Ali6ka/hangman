@@ -10,13 +10,7 @@ public class SecretWord
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    public SecretWord(){}
-
-    public SecretWord(String word)
-    {
-        this.word = word;
-    }
-
+    @Column(unique = true)
     private String word;
 
     public int getId()

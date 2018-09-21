@@ -4,6 +4,7 @@ import kg.edu.iaau.hangman.entity.Person;
 import kg.edu.iaau.hangman.repository.PersonDAO;
 import kg.edu.iaau.hangman.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,9 @@ public class PersonServiceImpl implements PersonService
 {
     @Autowired
     private PersonDAO personDAO;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public Person findById(int id)
@@ -35,6 +39,12 @@ public class PersonServiceImpl implements PersonService
     @Override
     public void save(Person person)
     {
+        if (person.getPassword() != null){
+            person.setPassword(bCryptPasswordEncoder.encode(person.getPassword()));
+        } else {
+            person.setPassword(findById(person.getId()).getPassword());
+        }
+
         personDAO.saveAndFlush(person);
     }
 
@@ -47,6 +57,6 @@ public class PersonServiceImpl implements PersonService
     @Override
     public boolean isAdmin(String username)
     {
-        return findByUsername(username).isAdmin();
+        return findByUsername(username).getIsAdmin();
     }
 }
